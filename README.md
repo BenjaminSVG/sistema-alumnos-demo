@@ -330,6 +330,9 @@ Copia de demostración del sistema en producción. Diferencias con el original:
 
 - Datos de muestra inventados en lugar de los reales.
 - Sin credenciales, claves ni direcciones de correo reales.
+- **Plantilla de certificado neutra.** La original lleva la marca de la academia, el
+  sello institucional y la firma manuscrita del coordinador. Publicar eso permitiría
+  falsificar certificados, así que se reemplazó por una plantilla genérica.
 - Historial de git nuevo desde cero.
 - Sin los scripts de despliegue propios de la instalación en producción.
 
