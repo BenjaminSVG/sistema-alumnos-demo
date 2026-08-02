@@ -1,0 +1,14 @@
+node_modules/
+backups/
+keynes.db
+keynes.db-shm
+keynes.db-wal
+*.jpeg
+*.jpg
+*.png
+
+# Nada de esto corre en produccion: achica el bundle
+test/
+referencias/
+scripts/
+db/seed.js

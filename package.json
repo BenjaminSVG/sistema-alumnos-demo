@@ -1,0 +1,23 @@
+{
+  "name": "keynes-sistema-demo",
+  "version": "1.0.0",
+  "description": "Sistema de gestion academica: alumnos, cursos, empresas, asistencias, pagos y certificados verificables. Version de demostracion con datos ficticios.",
+  "main": "server.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BenjaminSVG/keynes-sistema-demo.git"
+  },
+  "keywords": ["nodejs", "express", "sqlite", "turso", "vercel", "serverless", "education"],
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node db/seed-demo.js",
+    "test": "node test/run.js"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "compression": "^1.8.1",
+    "express": "^4.18.2"
+  }
+}
