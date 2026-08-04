@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Keynes — Acceso</title>
+<title>SGA — Acceso</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -136,7 +136,7 @@
 <body>
 <div class="card">
   <div class="brand">
-    <div class="brand-logo"><span class="arrows">&raquo;</span>KEYNES</div>
+    <div class="brand-logo"><span class="arrows">&raquo;</span>SGA</div>
     <div class="brand-sub">Education &amp; Technology</div>
   </div>
 
@@ -196,7 +196,7 @@
       errorBox.style.display = 'flex';
       // Restaurar la contraseña ingresada antes (se guardó al enviar el formulario)
       try {
-        const pw = sessionStorage.getItem('keynes_pw_tmp');
+        const pw = sessionStorage.getItem('sga_pw_tmp');
         if (pw) { const p = document.getElementById('password'); if (p) p.value = pw; }
       } catch (e) {}
       setTimeout(() => document.getElementById('code').focus(), 50);
@@ -225,7 +225,7 @@
   // Guardar la contraseña al enviar para no perderla en el paso de 2FA (se limpia al entrar a la app).
   // ponytail: se guarda solo en sessionStorage de este mismo origen y se borra tras el login.
   document.querySelector('form').addEventListener('submit', () => {
-    try { sessionStorage.setItem('keynes_pw_tmp', pwInput.value); } catch (e) {}
+    try { sessionStorage.setItem('sga_pw_tmp', pwInput.value); } catch (e) {}
   });
 </script>
 </body>

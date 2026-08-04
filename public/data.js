@@ -1,5 +1,5 @@
 // =============================================================
-//  CAPA DE DATOS — Sistema Keynes
+//  CAPA DE DATOS — Sistema de Gestión Académica
 //
 //  Fuente primaria: API REST → SQLite (server.js)
 //  Fallback:        localStorage (cuando el servidor no está disponible)
@@ -42,7 +42,7 @@ async function loadData() {
   let cargadoDesdeApi = false;
 
   // ¿El servidor ya tuvo datos alguna vez? Si es así, el localStorage es obsoleto.
-  const everSynced = !!localStorage.getItem('keynes_server_synced');
+  const everSynced = !!localStorage.getItem('sga_server_synced');
 
   try {
     const res = await fetch('/api/data');
@@ -57,7 +57,7 @@ async function loadData() {
       _dataVersion = data.version   || 0;
       cargadoDesdeApi = true;
       // Marcar que el servidor es la fuente de verdad — nunca más usar localStorage como origen
-      localStorage.setItem('keynes_server_synced', '1');
+      localStorage.setItem('sga_server_synced', '1');
       _persistCache();   // refrescar cache para el pintado instantáneo del próximo boot
     }
   } catch {
@@ -68,8 +68,8 @@ async function loadData() {
   // SOLO si el servidor nunca tuvo datos (migración inicial, no para tabs viejos)
   if (!cargadoDesdeApi && !everSynced) {
     try {
-      const s = localStorage.getItem('keynes_students');
-      const c = localStorage.getItem('keynes_courses');
+      const s = localStorage.getItem('sga_students');
+      const c = localStorage.getItem('sga_courses');
       if (s) STUDENTS = JSON.parse(s);
       if (c) COURSES  = JSON.parse(c);
 
@@ -107,7 +107,7 @@ async function loadDelta(since) {
       COMPANIES = data.companies || [];
     }
     _dataVersion = data.version || 0;
-    localStorage.setItem('keynes_server_synced', '1');
+    localStorage.setItem('sga_server_synced', '1');
     _persistCache();
   } catch {
     return;
@@ -120,9 +120,9 @@ async function loadDelta(since) {
 // Se usa en el boot para mostrar datos de inmediato mientras loadData refresca del servidor.
 function loadFromCache() {
   try {
-    const s  = localStorage.getItem('keynes_students');
-    const c  = localStorage.getItem('keynes_courses');
-    const co = localStorage.getItem('keynes_companies');
+    const s  = localStorage.getItem('sga_students');
+    const c  = localStorage.getItem('sga_courses');
+    const co = localStorage.getItem('sga_companies');
     if (s)  STUDENTS  = JSON.parse(s);
     if (c)  COURSES   = JSON.parse(c);
     if (co) COMPANIES = JSON.parse(co);
@@ -270,16 +270,16 @@ function isSaving() { return _saving; }
 
 // Notifica el estado de guardado a la UI: 'saving' | 'saved' | 'offline'.
 function _emitSave(status) {
-  try { document.dispatchEvent(new CustomEvent('keynes:save', { detail: status })); } catch {}
+  try { document.dispatchEvent(new CustomEvent('sga:save', { detail: status })); } catch {}
 }
 
 // ── Guarda datos en API + localStorage ───────────────────────
 // Guarda el estado actual en localStorage (cache para el pintado instantáneo del próximo boot).
 function _persistCache() {
   try {
-    localStorage.setItem('keynes_students',  JSON.stringify(STUDENTS));
-    localStorage.setItem('keynes_courses',   JSON.stringify(COURSES));
-    localStorage.setItem('keynes_companies', JSON.stringify(COMPANIES));
+    localStorage.setItem('sga_students',  JSON.stringify(STUDENTS));
+    localStorage.setItem('sga_courses',   JSON.stringify(COURSES));
+    localStorage.setItem('sga_companies', JSON.stringify(COMPANIES));
   } catch {}
 }
 
@@ -379,8 +379,8 @@ const RESTORE_TANDA = 25;
 
 function validarBackup(b) {
   if (!b || typeof b !== 'object')   return 'El archivo no es un JSON válido.';
-  if (!Array.isArray(b.students))    return 'Al archivo le falta la lista de alumnos: no parece un backup de Keynes.';
-  if (!Array.isArray(b.courses))     return 'Al archivo le falta la lista de cursos: no parece un backup de Keynes.';
+  if (!Array.isArray(b.students))    return 'Al archivo le falta la lista de alumnos: no parece un backup del sistema.';
+  if (!Array.isArray(b.courses))     return 'Al archivo le falta la lista de cursos: no parece un backup del sistema.';
   if (b.students.some(s => !s || !s.id)) return 'El archivo tiene alumnos sin id. Está corrupto.';
   return null;
 }

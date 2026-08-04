@@ -25,7 +25,7 @@ const patchMe = (base, ck, body) => fetch(base + '/api/me', { method: 'PATCH',
   assert.ok(ck, 'admin logueado');
 
   // cambiar solo nombre (no requiere contraseña actual)
-  const r1 = await patchMe(base, ck, { nombre: 'Jefe Keynes', username: 'admin' });
+  const r1 = await patchMe(base, ck, { nombre: 'Jefe Administrativo', username: 'admin' });
   assert.equal(r1.status, 200, 'cambia nombre sin password');
 
   // cambiar contraseña con actual INCORRECTA -> 403

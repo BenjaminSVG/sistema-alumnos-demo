@@ -1,5 +1,5 @@
 -- =============================================================
---  KEYNES Education & Technology — Esquema SQL (SQLite)
+--  Sistema de Gestión Académica — Esquema SQL (SQLite)
 --
 --  Diagrama de relaciones:
 --

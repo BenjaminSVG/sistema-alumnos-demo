@@ -17,7 +17,7 @@ const PROHIBIDOS = [
   '/server.js', '/package.json', '/package-lock.json', '/vercel.json',
   '/db/seed.js', '/db/schema.sql',
   '/scripts/push-to-production.js', '/scripts/check-prod.js', '/scripts/backup.ps1',
-  '/test/test_logs.js', '/keynes.db', '/.env.local',
+  '/test/test_logs.js', '/sistema.db', '/.env.local',
   // Rutas de antes de ordenar el proyecto en carpetas: tampoco deben servirse
   '/seed.js', '/schema.sql', '/push-to-production.js', '/check-prod.js', '/backup.ps1',
 ];
@@ -69,7 +69,7 @@ const NECESARIOS = ['/', '/styles.css', '/app.js', '/data.js', '/cert-template.p
     }
   })(RAIZ, '');
 
-  const SOSPECHOSO = /Keynes!\d{4}!/;
+  const SOSPECHOSO = /[A-Za-z]{4,}![0-9]{4}!/;
   const conCredencial = archivos.filter(([, abs]) => SOSPECHOSO.test(fsx.readFileSync(abs, 'utf8')));
   assert.deepStrictEqual(conCredencial.map(([r]) => r), [],
     'Hay una contrasena escrita en el codigo versionado. Movela a una variable de entorno.');

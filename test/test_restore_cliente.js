@@ -106,7 +106,7 @@ const mios = arr => arr.filter(s => String(s.id).startsWith('CLI-')).sort((a, b)
   assert.deepStrictEqual(enServidor, backup.students, 'el servidor tambien quedo identico');
 
   // ── La cache local se actualizo (si no, el proximo boot pinta lo viejo) ──
-  const cache = mios(JSON.parse(almacen['keynes_students'] || '[]'));
+  const cache = mios(JSON.parse(almacen['sga_students'] || '[]'));
   assert.equal(cache.length, 30, 'localStorage quedo al dia tras restaurar');
 
   server.close();

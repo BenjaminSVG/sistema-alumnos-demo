@@ -1,4 +1,4 @@
-# Sistema de Gestión Académica — Keynes Education & Technology
+# Sistema de Gestión Académica
 
 Sistema de gestión para una academia de capacitación en Paraguay: alumnos, cursos, empresas
 cliente, asistencias, pagos, informes y emisión de certificados con verificación por QR.
@@ -282,8 +282,8 @@ vez del estado real del módulo, y pasaba igual con el código roto.
 ## Cómo ejecutarlo
 
 ```bash
-git clone https://github.com/BenjaminSVG/keynes-sistema-demo.git
-cd keynes-sistema-demo
+git clone https://github.com/BenjaminSVG/sistema-alumnos-demo.git
+cd sistema-alumnos-demo
 npm install
 
 cp .env.example .env      # y editá los valores

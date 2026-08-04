@@ -1,7 +1,7 @@
 node_modules/
-keynes.db
-keynes.db-shm
-keynes.db-wal
+sistema.db
+sistema.db-shm
+sistema.db-wal
 test.db
 test.db-shm
 test.db-wal

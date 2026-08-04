@@ -118,7 +118,7 @@ global.fetch = (url, opts) => {
   assert.ok(mail, 'se mandó el correo de actividad');
   assert.ok(mail.text.includes('Carla'), 'el cuerpo muestra el nombre descifrado');
   assert.equal(mail.attachments.length, 1, 'un adjunto');
-  assert.ok(/^keynes-logs-\d{4}-\d{2}-\d{2}\.json$/.test(mail.attachments[0].filename), 'nombre del adjunto');
+  assert.ok(/^sga-logs-\d{4}-\d{2}-\d{2}\.json$/.test(mail.attachments[0].filename), 'nombre del adjunto');
   const adj = JSON.parse(Buffer.from(mail.attachments[0].content, 'base64').toString('utf8'));
   assert.ok(Array.isArray(adj) && adj.length === antes, 'el JSON adjunto trae los eventos');
   assert.ok(adj.some(e => String(e.detalle).includes('Carla')), 'el JSON viene descifrado');

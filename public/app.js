@@ -13,7 +13,7 @@
       // El caché es de la sesión anterior: borrarlo evita mostrar datos de otro
       // usuario si en esta computadora entra alguien distinto.
       try {
-        ["keynes_students", "keynes_courses", "keynes_companies", "keynes_server_synced"]
+        ["sga_students", "sga_courses", "sga_companies", "sga_server_synced"]
           .forEach(k => localStorage.removeItem(k));
       } catch {}
       location.href = "/login";
@@ -594,7 +594,7 @@ function viewDashboard() {
 
   return `
   <div class="page-head">
-    <div><h2>Panel de Control</h2><p>Resumen general de alumnos y cursos de Keynes.</p></div>
+    <div><h2>Panel de Control</h2><p>Resumen general de alumnos y cursos del sistema.</p></div>
   </div>
 
   <div class="kpi-grid">
@@ -806,7 +806,7 @@ async function exportDashboardHTML() {
 
   const html = `<!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Keynes — Panel Financiero</title>
+<title>SGA — Panel Financiero</title>
 ${chartTag}
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -825,7 +825,7 @@ ${chartTag}
   td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
   .foot{color:#94a3b8;font-size:11px;text-align:center;margin-top:20px}
 </style></head><body>
-  <h1>Keynes — Panel Financiero</h1>
+  <h1>SGA — Panel Financiero</h1>
   <div class="sub">Generado el ${gen} · pasá el mouse sobre los gráficos para ver el detalle</div>
   <div class="kpis">
     <div class="kpi"><div class="v">₲ ${money(fin.totalPaid)}</div><div class="l">Total recaudado</div></div>
@@ -839,7 +839,7 @@ ${chartTag}
     <div class="card"><h3>Recaudado por curso <span style="font-weight:500;color:#94a3b8;font-size:11px">(estimado)</span></h3><div class="wrap"><canvas id="cC"></canvas></div></div>
     <div class="card"><h3>Recaudado por empresa</h3><div class="wrap"><canvas id="cE"></canvas></div></div>
   </div>
-  <div class="foot">Keynes Education & Technology — Reporte interno confidencial</div>
+  <div class="foot">Sistema de Gestión Académica — Reporte interno confidencial</div>
 <script>
   const D=${JSON.stringify(data)};
   const money=n=>'₲ '+new Intl.NumberFormat('es-PY').format(Math.round(n||0));
@@ -855,7 +855,7 @@ ${chartTag}
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `Keynes_Finanzas_${new Date().toISOString().slice(0, 10)}.html`;
+  a.download = `SGA_Finanzas_${new Date().toISOString().slice(0, 10)}.html`;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 4000);
   toast("Panel interactivo descargado. Abrilo en tu navegador.");
@@ -902,7 +902,7 @@ async function exportDashboardPDF() {
 
   // Encabezado
   doc.setFont("helvetica", "bold"); doc.setFontSize(17); doc.setTextColor(15, 23, 42);
-  doc.text("Keynes — Panel Financiero", M, y); y += 6;
+  doc.text("SGA — Panel Financiero", M, y); y += 6;
   doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(100, 116, 139);
   doc.text("Generado el " + new Date().toLocaleString("es"), M, y); y += 9;
 
@@ -964,8 +964,8 @@ async function exportDashboardPDF() {
   drawKV("Recaudado por empresa", fin.byCompany, c => c.name);
 
   doc.setFontSize(7.5); doc.setTextColor(148, 163, 184);
-  doc.text("Keynes Education & Technology — Reporte interno confidencial", M, 292);
-  doc.save(`Keynes_Finanzas_${new Date().toISOString().slice(0, 10)}.pdf`);
+  doc.text("Sistema de Gestión Académica — Reporte interno confidencial", M, 292);
+  doc.save(`SGA_Finanzas_${new Date().toISOString().slice(0, 10)}.pdf`);
   toast("Panel exportado a PDF.");
 }
 
@@ -1012,7 +1012,7 @@ async function exportPagosPDF(opts) {
 
   // Encabezado
   doc.setFont("helvetica", "bold"); doc.setFontSize(17); doc.setTextColor(15, 23, 42);
-  doc.text("Keynes — Registro de Pagos de Alumnos", M, y); y += 6;
+  doc.text("SGA — Registro de Pagos de Alumnos", M, y); y += 6;
   doc.setFont("helvetica", "normal"); doc.setFontSize(9.5); doc.setTextColor(100, 116, 139);
   doc.text("Generado el " + new Date().toLocaleString("es"), M, y); y += 5;
   doc.text(`Filtro: ${opts.filterLabel}  ·  Período: ${opts.periodLabel}`, M, y); y += 8;
@@ -1029,7 +1029,7 @@ async function exportPagosPDF(opts) {
   if (!items.length) {
     doc.setFont("helvetica", "italic"); doc.setFontSize(11); doc.setTextColor(100, 116, 139);
     doc.text("No hay alumnos que coincidan con los filtros seleccionados.", M, y);
-    doc.save(`Keynes_Pagos_${new Date().toISOString().slice(0, 10)}.pdf`);
+    doc.save(`SGA_Pagos_${new Date().toISOString().slice(0, 10)}.pdf`);
     toast("Registro de pagos exportado a PDF.");
     return;
   }
@@ -1083,8 +1083,8 @@ async function exportPagosPDF(opts) {
   });
 
   doc.setFontSize(7.5); doc.setTextColor(148, 163, 184);
-  doc.text("Keynes Education & Technology — Reporte interno confidencial", M, 292);
-  doc.save(`Keynes_Pagos_${new Date().toISOString().slice(0, 10)}.pdf`);
+  doc.text("Sistema de Gestión Académica — Reporte interno confidencial", M, 292);
+  doc.save(`SGA_Pagos_${new Date().toISOString().slice(0, 10)}.pdf`);
   toast("Registro de pagos exportado a PDF.");
 }
 
@@ -1121,7 +1121,7 @@ function exportPagosCSV(opts) {
   const lines = [];
 
   // Encabezado del documento
-  lines.push(row(["Keynes — Registro de Pagos de Alumnos"]));
+  lines.push(row(["SGA — Registro de Pagos de Alumnos"]));
   lines.push(row(["Generado el", new Date().toLocaleString("es")]));
   lines.push(row(["Filtro", opts.filterLabel, "Período", opts.periodLabel]));
   lines.push("");
@@ -1159,7 +1159,7 @@ function exportPagosCSV(opts) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `Keynes_Pagos_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.download = `SGA_Pagos_${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
   toast("Registro de pagos exportado a Excel (.csv).");
@@ -1195,7 +1195,7 @@ async function exportPagosXLSX(opts) {
   const HEADERS = ["Alumno", "Estado", "Empresa", "Tipo de pago", "Fecha", "Concepto", "Monto (Gs.)", "Estado del pago"];
   const NCOL = HEADERS.length;
   const aoa = [
-    ["Keynes — Registro de Pagos de Alumnos"],
+    ["SGA — Registro de Pagos de Alumnos"],
     ["Generado el " + new Date().toLocaleString("es")],
     [`Filtro: ${opts.filterLabel}   ·   Período: ${opts.periodLabel}`],
     [],
@@ -1285,7 +1285,7 @@ async function exportPagosXLSX(opts) {
 
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Pagos");
-  XLSX.writeFile(wb, `Keynes_Pagos_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  XLSX.writeFile(wb, `SGA_Pagos_${new Date().toISOString().slice(0, 10)}.xlsx`);
   toast("Registro de pagos exportado a Excel (.xlsx).");
 }
 
@@ -1318,7 +1318,7 @@ async function exportEmpresasPDF(opts) {
   });
 
   doc.setFont("helvetica", "bold"); doc.setFontSize(17); doc.setTextColor(15, 23, 42);
-  doc.text("Keynes — Registro de Pagos de Empresas", M, y); y += 6;
+  doc.text("SGA — Registro de Pagos de Empresas", M, y); y += 6;
   doc.setFont("helvetica", "normal"); doc.setFontSize(9.5); doc.setTextColor(100, 116, 139);
   doc.text("Generado el " + new Date().toLocaleString("es"), M, y); y += 5;
   doc.text(`Filtro: ${opts.filterLabel}  ·  Período: ${opts.periodLabel}`, M, y); y += 8;
@@ -1334,7 +1334,7 @@ async function exportEmpresasPDF(opts) {
   if (!items.length) {
     doc.setFont("helvetica", "italic"); doc.setFontSize(11); doc.setTextColor(100, 116, 139);
     doc.text("No hay empresas que coincidan con los filtros seleccionados.", M, y);
-    doc.save(`Keynes_Pagos_Empresas_${new Date().toISOString().slice(0, 10)}.pdf`);
+    doc.save(`SGA_Pagos_Empresas_${new Date().toISOString().slice(0, 10)}.pdf`);
     toast("Registro de pagos de empresas exportado a PDF.");
     return;
   }
@@ -1383,8 +1383,8 @@ async function exportEmpresasPDF(opts) {
   });
 
   doc.setFontSize(7.5); doc.setTextColor(148, 163, 184);
-  doc.text("Keynes Education & Technology — Reporte interno confidencial", M, 292);
-  doc.save(`Keynes_Pagos_Empresas_${new Date().toISOString().slice(0, 10)}.pdf`);
+  doc.text("Sistema de Gestión Académica — Reporte interno confidencial", M, 292);
+  doc.save(`SGA_Pagos_Empresas_${new Date().toISOString().slice(0, 10)}.pdf`);
   toast("Registro de pagos de empresas exportado a PDF.");
 }
 
@@ -1398,7 +1398,7 @@ async function exportEmpresasXLSX(opts) {
   const HEADERS = ["Empresa", "Alumno", "Fecha", "Concepto", "Monto (Gs.)", "Estado del pago"];
   const NCOL = HEADERS.length;
   const aoa = [
-    ["Keynes — Registro de Pagos de Empresas"],
+    ["SGA — Registro de Pagos de Empresas"],
     ["Generado el " + new Date().toLocaleString("es")],
     [`Filtro: ${opts.filterLabel}   ·   Período: ${opts.periodLabel}`],
     [],
@@ -1477,7 +1477,7 @@ async function exportEmpresasXLSX(opts) {
 
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Pagos Empresas");
-  XLSX.writeFile(wb, `Keynes_Pagos_Empresas_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  XLSX.writeFile(wb, `SGA_Pagos_Empresas_${new Date().toISOString().slice(0, 10)}.xlsx`);
   toast("Registro de pagos de empresas exportado a Excel (.xlsx).");
 }
 
@@ -1684,7 +1684,7 @@ function viewLista() {
   <div class="page-head">
     <div>
       <h2>Lista de Alumnos</h2>
-      <p>Visualizá y gestioná todos los alumnos registrados en Keynes.</p>
+      <p>Visualizá y gestioná todos los alumnos registrados en el sistema.</p>
     </div>
     ${isAdmin() ? `<button class="btn btn-primary" data-go="registro">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -2456,7 +2456,7 @@ function viewSoporte() {
   const tutorial = `
     <div class="doc">
       <header class="doc-header">
-        <div class="doc-eyebrow">Keynes Education &amp; Technology</div>
+        <div class="doc-eyebrow">Sistema de Gestión Académica</div>
         <h1 class="doc-title">Manual de uso del sistema</h1>
         <p class="doc-lead">Guía completa de operación del sistema de gestión académica${admin ? ", con inclusión de las funciones reservadas a administradores." : "."}</p>
         <div class="doc-actions">
@@ -2529,7 +2529,7 @@ async function exportTutorialPDF() {
   const brk = need => { if (y + need > 285) { doc.addPage(); y = 20; } };
 
   doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(37, 99, 235);
-  doc.text("KEYNES EDUCATION & TECHNOLOGY", M, y); y += 7;
+  doc.text("SISTEMA DE GESTION ACADEMICA", M, y); y += 7;
   doc.setFont("helvetica", "bold"); doc.setFontSize(21); doc.setTextColor(15, 23, 42);
   doc.text("Manual de uso del sistema", M, y); y += 8;
   doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(100, 116, 139);
@@ -2556,8 +2556,8 @@ async function exportTutorialPDF() {
   });
 
   doc.setFontSize(7.5); doc.setTextColor(148, 163, 184);
-  doc.text("Keynes Education & Technology — Guía de uso", M, 292);
-  doc.save(`Keynes_Tutorial_${new Date().toISOString().slice(0, 10)}.pdf`);
+  doc.text("Sistema de Gestión Académica — Guía de uso", M, 292);
+  doc.save(`SGA_Tutorial_${new Date().toISOString().slice(0, 10)}.pdf`);
   toast("Tutorial exportado a PDF.");
 }
 
@@ -3843,7 +3843,7 @@ async function downloadPDF(studentId, opts) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(20);
   doc.setTextColor(255, 255, 255);
-  doc.text(">> KEYNES", M, 14);
+  doc.text(">> SGA", M, 14);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8.5);
   doc.setTextColor(180, 210, 255);
@@ -4107,14 +4107,14 @@ async function downloadPDF(studentId, opts) {
   // ── Footer ──
   doc.setFontSize(7.5);
   doc.setTextColor(148, 163, 184);
-  doc.text("Keynes Education & Technology — Sistema de Gestión Interno", M, 290);
+  doc.text("Sistema de Gestión Académica — Sistema de Gestión Interno", M, 290);
 
   const renderedCourseNames = (opts.selectedEnrollments && opts.selectedEnrollments.length > 0
     ? opts.selectedEnrollments
     : (s.enrollments || []).map((_, idx) => ({ idx }))
   ).map(sel => { const enr = s.enrollments[sel.idx]; const c = enr ? getCourse(enr.courseId) : null; return c ? c.name : ''; }).filter(Boolean);
   const filenameSuffix = renderedCourseNames.length === 1 ? '_' + renderedCourseNames[0] : renderedCourseNames.length > 1 ? '_Varios_Cursos' : '';
-  const filename = `Keynes_${s.name}_${s.surname}${filenameSuffix}.pdf`.replace(/\s+/g, "_");
+  const filename = `SGA_${s.name}_${s.surname}${filenameSuffix}.pdf`.replace(/\s+/g, "_");
   doc.save(filename);
   toast("PDF descargado correctamente.");
 }
@@ -4739,7 +4739,7 @@ function buildInformeEmpresaText(empresaId, date, studentIds, observations) {
   if (presentData.length === 0) return "";
 
   // ── Encabezado ──────────────────────────────────────
-  let text = `*Informe  ${professorName || "KEYNES"}*\n`;
+  let text = `*Informe  ${professorName || "SGA"}*\n`;
 
   // ── Línea de alumnos + ausentes + empresa + cursos + horario ───
   const presentNames = presentData.map(({ s }) => `${esc(s.name)} ${esc(s.surname)}`);
@@ -4829,7 +4829,7 @@ async function downloadPDFEmpresa(empresaId, selectedStudentIds, opts) {
     doc.setFillColor(30, 58, 95);
     doc.rect(0, 0, W, 32, "F");
     doc.setFont("helvetica", "bold"); doc.setFontSize(20); doc.setTextColor(255, 255, 255);
-    doc.text(">> KEYNES", M, 14);
+    doc.text(">> SGA", M, 14);
     doc.setFont("helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(180, 210, 255);
     doc.text("EDUCATION & TECHNOLOGY  |  ESTUDIOS SUPERIORES", M, 20);
     doc.setFontSize(9); doc.setTextColor(255, 255, 255);
@@ -4984,10 +4984,10 @@ async function downloadPDFEmpresa(empresaId, selectedStudentIds, opts) {
     }
 
     doc.setFontSize(7.5); doc.setTextColor(148, 163, 184);
-    doc.text("Keynes Education & Technology — Sistema de Gestión Interno", M, 290);
+    doc.text("Sistema de Gestión Académica — Sistema de Gestión Interno", M, 290);
   });
 
-  const filename = `Keynes_${c ? c.name.replace(/\s+/g, "_") : "Empresa"}_Informe.pdf`;
+  const filename = `SGA_${c ? c.name.replace(/\s+/g, "_") : "Empresa"}_Informe.pdf`;
   doc.save(filename);
   toast(`PDF descargado correctamente (${students.length} alumno${students.length !== 1 ? "s" : ""}).`);
 }
@@ -5058,7 +5058,7 @@ function viewUsuarios() {
   <div class="page-head">
     <div>
       <h2>Usuarios del Sistema</h2>
-      <p>Creá y administrá las cuentas que pueden acceder a Keynes.</p>
+      <p>Creá y administrá las cuentas que pueden acceder a SGA.</p>
     </div>
     <button class="btn btn-primary" data-new-user>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -5272,7 +5272,7 @@ function exportBackup() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `keynes-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.download = `sga-backup-${new Date().toISOString().slice(0, 10)}.json`;
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
   toast("Backup exportado.");
@@ -5740,7 +5740,7 @@ function toggleTheme() {
   const dark = document.documentElement.getAttribute("data-theme") === "dark";
   const next = dark ? "light" : "dark";
   document.documentElement.setAttribute("data-theme", next);
-  try { localStorage.setItem("keynes_theme", next); } catch {}
+  try { localStorage.setItem("sga_theme", next); } catch {}
   applyThemeIcon();
   if (state.view === "dashboard") render(); // repintar gráficos con el tema nuevo
 }
@@ -7043,7 +7043,7 @@ document.getElementById("searchType").addEventListener("change", e => {
 (function () {
   let hideT;
   const LABEL = { saving: "Guardando…", saved: "Guardado", offline: "Sin conexión" };
-  document.addEventListener("keynes:save", e => {
+  document.addEventListener("sga:save", e => {
     const el = document.getElementById("saveStatus");
     if (!el) return;
     const status = e.detail;
@@ -7056,7 +7056,7 @@ document.getElementById("searchType").addEventListener("change", e => {
 })();
 
 // ====== Init ======
-try { sessionStorage.removeItem("keynes_pw_tmp"); } catch (e) {}  // limpiar la contraseña temporal del login/2FA
+try { sessionStorage.removeItem("sga_pw_tmp"); } catch (e) {}  // limpiar la contraseña temporal del login/2FA
 // Boot: 1) loadMe (rápido, define el rol) → pintar YA desde cache (localStorage) →
 //       2) loadData refresca del servidor en segundo plano y re-renderiza.
 loadMe()

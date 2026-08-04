@@ -53,7 +53,7 @@ const SESSION_SECRET = process.env.SESSION_SECRET || crypto.randomBytes(32).toSt
 // Sin valor por defecto a proposito: tenerlo escrito acá lo publicaba en el
 // repositorio. Solo se usa para sembrar el primer admin (ver initDB).
 const APP_PASSWORD   = process.env.APP_PASSWORD   || '';
-const COOKIE_NAME    = 'keynes_auth';
+const COOKIE_NAME    = 'sga_auth';
 const COOKIE_MAX_AGE = 30 * 24 * 60 * 60; // 30 días en segundos
 
 function parseCookies(req) {
@@ -381,7 +381,7 @@ app.get('/verificar', (req, res) => {
 
   res.type('html').send(`<!doctype html><html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Verificación de certificado — Keynes</title>
+<title>Verificación de certificado — SGA</title>
 <style>
   :root{color-scheme:light}
   body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f1f5f9;color:#1e293b;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
@@ -401,10 +401,10 @@ app.get('/verificar', (req, res) => {
     <div class="head">
       <div class="ico">${valid ? '✓' : '✕'}</div>
       <h1>${valid ? 'Certificado válido' : 'Certificado no válido'}</h1>
-      <p>${valid ? 'Emitido por Keynes Education &amp; Technology' : 'La firma no coincide o el enlace fue alterado.'}</p>
+      <p>${valid ? 'Emitido por la institución' : 'La firma no coincide o el enlace fue alterado.'}</p>
     </div>
-    ${valid ? `<div class="brand">KEYNES <span>EDUCATION &amp; TECHNOLOGY · ESTUDIOS SUPERIORES</span></div><table>${rows}</table>` : ''}
-    <div class="foot">Verificación de autenticidad · keynes-sistema</div>
+    ${valid ? `<div class="brand">SGA <span>SISTEMA DE GESTIÓN ACADÉMICA · ESTUDIOS SUPERIORES</span></div><table>${rows}</table>` : ''}
+    <div class="foot">Verificación de autenticidad · sistema-alumnos</div>
   </div>
 </body></html>`);
 });
@@ -548,8 +548,8 @@ app.post('/api/me/2fa/setup', async (req, res) => {
   try {
     const secret = newTotpSecret();
     await db.execute({ sql: 'UPDATE usuarios SET twofa_secret = ?, twofa_enabled = 0 WHERE id = ?', args: [encrypt(secret), req.user.id] });
-    const label = encodeURIComponent(`Keynes:${req.user.username}`);
-    const otpauth = `otpauth://totp/${label}?secret=${secret}&issuer=Keynes&digits=6&period=30`;
+    const label = encodeURIComponent(`SGA:${req.user.username}`);
+    const otpauth = `otpauth://totp/${label}?secret=${secret}&issuer=SGA&digits=6&period=30`;
     res.json({ secret, otpauth });
   } catch (err) {
     console.error('[2fa setup]', err.message);
@@ -662,7 +662,7 @@ async function sendSupportEmail(asunto, cuerpo, meta = {}) {
   // 2) Resend (alternativa): requiere RESEND_API_KEY.
   const key = process.env.RESEND_API_KEY;
   if (key) {
-    const from = process.env.SUPPORT_FROM || 'Keynes Soporte <onboarding@resend.dev>';
+    const from = process.env.SUPPORT_FROM || 'Soporte <onboarding@resend.dev>';
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
@@ -680,16 +680,16 @@ async function sendBackupEmail(jsonStr) {
   const key = process.env.RESEND_API_KEY;
   if (!key) return false;
   const to    = process.env.BACKUP_EMAIL || SUPPORT_EMAIL;
-  const from  = process.env.SUPPORT_FROM || 'Keynes Backup <onboarding@resend.dev>';
+  const from  = process.env.SUPPORT_FROM || 'Backup <onboarding@resend.dev>';
   const fecha = new Date().toISOString().slice(0, 10);
   const content = Buffer.from(jsonStr, 'utf8').toString('base64');
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from, to: [to], subject: `[Keynes] Backup ${fecha}`,
-      text: `Backup automático de Keynes (${fecha}). Archivo JSON adjunto.`,
-      attachments: [{ filename: `keynes-backup-${fecha}.json`, content }],
+      from, to: [to], subject: `[SGA] Backup ${fecha}`,
+      text: `Backup automático de SGA (${fecha}). Archivo JSON adjunto.`,
+      attachments: [{ filename: `sga-backup-${fecha}.json`, content }],
     }),
   });
   if (!r.ok) console.error('[backup] Resend falló:', r.status, await r.text().catch(() => ''));
@@ -705,14 +705,14 @@ app.post('/api/soporte', async (req, res) => {
     const u = req.user;
     const fecha = new Date().toISOString();
     const cuerpo =
-      `Nuevo mensaje de soporte — Keynes\n` +
+      `Nuevo mensaje de soporte — SGA\n` +
       `De: ${u.nombre || u.username} (usuario: ${u.username}, rol: ${u.role})\n` +
       `Fecha: ${new Date().toLocaleString('es')}\n` +
       `Asunto: ${asunto || '(sin asunto)'}\n\n` +
       `${mensaje}\n`;
 
     let enviado = false;
-    try { enviado = await sendSupportEmail(`[Keynes] ${asunto || 'Mensaje de soporte'}`, cuerpo, { usuario: `${u.nombre || u.username} (${u.username})` }); }
+    try { enviado = await sendSupportEmail(`[SGA] ${asunto || 'Mensaje de soporte'}`, cuerpo, { usuario: `${u.nombre || u.username} (${u.username})` }); }
     catch (e) { console.error('[soporte] error enviando email:', e.message); }
 
     // Guardar cifrado como respaldo (para no perder el mensaje si el email no está configurado)
@@ -871,7 +871,7 @@ app.delete('/api/users/:id', requireAdmin, async (req, res) => {
 // ═════════════════════════════════════════════════════════════
 
 const db = createClient({
-  url:       process.env.TURSO_DATABASE_URL || 'file:keynes.db',
+  url:       process.env.TURSO_DATABASE_URL || 'file:sistema.db',
   authToken: process.env.TURSO_AUTH_TOKEN   || undefined,
 });
 
@@ -961,7 +961,7 @@ async function sendLogsEmail(fecha, eventos) {
   const key = process.env.RESEND_API_KEY;
   if (!key) return false;
   const to   = process.env.BACKUP_EMAIL || SUPPORT_EMAIL;
-  const from = process.env.SUPPORT_FROM || 'Keynes Bitácora <onboarding@resend.dev>';
+  const from = process.env.SUPPORT_FROM || 'SGA Bitácora <onboarding@resend.dev>';
 
   const cuerpo = eventos.length
     ? `Actividad del sistema — ${fecha}\n${eventos.length} eventos. Horarios en hora de Paraguay.\n${formatLogsTexto(eventos)}\nDetalle completo en el JSON adjunto.\n`
@@ -969,13 +969,13 @@ async function sendLogsEmail(fecha, eventos) {
 
   const body = {
     from, to: [to],
-    subject: `[Keynes] Actividad ${fecha} — ${eventos.length} evento${eventos.length === 1 ? '' : 's'}`,
+    subject: `[SGA] Actividad ${fecha} — ${eventos.length} evento${eventos.length === 1 ? '' : 's'}`,
     text: cuerpo,
   };
   // Sin eventos no adjuntamos nada: el correo existe solo para confirmar que el cron corrió.
   if (eventos.length) {
     body.attachments = [{
-      filename: `keynes-logs-${fecha}.json`,
+      filename: `sga-logs-${fecha}.json`,
       content: Buffer.from(JSON.stringify(eventos, null, 2), 'utf8').toString('base64'),
     }];
   }
@@ -1964,7 +1964,7 @@ app.post('/api/data', async (req, res) => {
 
 // ── Inicio local ──────────────────────────────────────────────
 if (require.main === module) {
-  app.listen(PORT, () => console.log(`\n  Keynes corriendo en http://localhost:${PORT}\n`));
+  app.listen(PORT, () => console.log(`\n  SGA corriendo en http://localhost:${PORT}\n`));
 }
 
 module.exports = app;

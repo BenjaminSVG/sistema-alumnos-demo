@@ -6,14 +6,14 @@
 //
 //   node db/seed-demo.js
 //
-// Escribe sobre la base que indique TURSO_DATABASE_URL (por defecto keynes.db).
+// Escribe sobre la base que indique TURSO_DATABASE_URL (por defecto sistema.db).
 
 const { createClient } = require('@libsql/client');
 const path = require('path');
 // (fs ya no hace falta: el esquema lo prepara el propio servidor)
 
 const db = createClient({
-  url: process.env.TURSO_DATABASE_URL || ('file:' + path.join(__dirname, '..', 'keynes.db')),
+  url: process.env.TURSO_DATABASE_URL || ('file:' + path.join(__dirname, '..', 'sistema.db')),
   authToken: process.env.TURSO_AUTH_TOKEN || undefined,
 });
 

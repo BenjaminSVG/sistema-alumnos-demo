@@ -90,7 +90,7 @@ const sinRuido = d => ({
   // ── 2. Tomar el JSON EXACTO que sale por correo ──────────
   adjuntos = [];
   await cron(base);
-  const adj = adjuntos.find(a => /^keynes-backup-\d{4}-\d{2}-\d{2}\.json$/.test(a.filename));
+  const adj = adjuntos.find(a => /^sga-backup-\d{4}-\d{2}-\d{2}\.json$/.test(a.filename));
   assert.ok(adj, 'el correo de backup lleva su adjunto JSON');
   const backup = JSON.parse(Buffer.from(adj.content, 'base64').toString('utf8'));
   assert.ok(backup.exportedAt, 'el backup trae fecha de exportacion');

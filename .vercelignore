@@ -1,8 +1,8 @@
 node_modules/
 backups/
-keynes.db
-keynes.db-shm
-keynes.db-wal
+sistema.db
+sistema.db-shm
+sistema.db-wal
 *.jpeg
 *.jpg
 *.png
